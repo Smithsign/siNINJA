@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stick Hero</title>
+    <title>Orange Hero</title>
     <style>
       html,
       body {
@@ -29,6 +29,8 @@
         right: 30px;
         font-size: 2em;
         font-weight: 900;
+        color: #FF6B35;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
       }
 
       #introduction {
@@ -40,6 +42,7 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         text-align: center;
         transition: opacity 2s;
+        color: #FF6B35;
       }
 
       #restart {
@@ -48,19 +51,23 @@
         position: absolute;
         border-radius: 50%;
         color: white;
-        background-color: red;
+        background-color: #FF6B35;
         border: none;
         font-weight: 700;
         font-size: 1.2em;
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         display: none;
         cursor: pointer;
+        box-shadow: 0 4px 8px rgba(255,107,53,0.3);
       }
 
       #perfect {
         position: absolute;
         opacity: 0;
         transition: opacity 2s;
+        color: #FF6B35;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
       }
 
       #youtube,
@@ -77,7 +84,7 @@
           position: absolute;
           bottom: 20px;
           left: 20px;
-          background: red;
+          background: #FF6B35;
           border-radius: 50% / 11%;
           transform: scale(0.8);
           transition: transform 0.5s;
@@ -96,7 +103,7 @@
           left: -6%;
           width: 112%;
           height: 85%;
-          background: red;
+          background: #FF6B35;
           border-radius: 9% / 50%;
         }
 
@@ -263,7 +270,7 @@
           minimumGap +
           Math.floor(Math.random() * (maximumGap - minimumGap));
 
-        const treeColors = ["#6D8821", "#8FAC34", "#98B333"];
+        const treeColors = ["#FF9F1C", "#FFB347", "#FFA836"];
         const color = treeColors[Math.floor(Math.random() * 3)];
 
         trees.push({ x, color });
@@ -476,8 +483,18 @@
       function drawPlatforms() {
         platforms.forEach(({ x, w }) => {
           // Draw platform
-          ctx.fillStyle = "black";
+          ctx.fillStyle = "#FF6B35";
           ctx.fillRect(
+            x,
+            canvasHeight - platformHeight,
+            w,
+            platformHeight + (window.innerHeight - canvasHeight) / 2
+          );
+
+          // Draw border
+          ctx.strokeStyle = "#E85D04";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(
             x,
             canvasHeight - platformHeight,
             w,
@@ -486,7 +503,7 @@
 
           // Draw perfect area only if hero did not yet reach the platform
           if (sticks.last().x < x) {
-            ctx.fillStyle = "red";
+            ctx.fillStyle = "#FFD166";
             ctx.fillRect(
               x + w / 2 - perfectAreaSize / 2,
               canvasHeight - platformHeight,
@@ -499,7 +516,7 @@
 
       function drawHero() {
         ctx.save();
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "#FF6B35";
         ctx.translate(
           heroX - heroWidth / 2,
           heroY + canvasHeight - platformHeight - heroHeight / 2
@@ -530,7 +547,7 @@
         ctx.fill();
 
         // Band
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "#E85D04";
         ctx.fillRect(-heroWidth / 2 - 1, -12, heroWidth + 2, 4.5);
         ctx.beginPath();
         ctx.moveTo(-9, -14.5);
@@ -570,7 +587,8 @@
 
           // Draw stick
           ctx.beginPath();
-          ctx.lineWidth = 2;
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = "#FF9F1C";
           ctx.moveTo(0, 0);
           ctx.lineTo(0, -stick.length);
           ctx.stroke();
@@ -581,16 +599,22 @@
       }
 
       function drawBackground() {
-        // Draw sky
+        // Draw sky gradient from light orange to yellow
         var gradient = ctx.createLinearGradient(0, 0, 0, window.innerHeight);
-        gradient.addColorStop(0, "#BBD691");
-        gradient.addColorStop(1, "#FEF1E1");
+        gradient.addColorStop(0, "#FFD166");
+        gradient.addColorStop(1, "#FFECB8");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
+        // Draw sun
+        ctx.beginPath();
+        ctx.fillStyle = "#FFD166";
+        ctx.arc(100, 100, 50, 0, Math.PI * 2);
+        ctx.fill();
+
         // Draw hills
-        drawHill(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#95C629");
-        drawHill(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#659F1C");
+        drawHill(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#FF9F1C");
+        drawHill(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#FF6B35");
 
         // Draw trees
         trees.forEach((tree) => drawTree(tree.x, tree.color));
@@ -622,7 +646,7 @@
         const treeCrownWidth = 10;
 
         // Draw trunk
-        ctx.fillStyle = "#7D833C";
+        ctx.fillStyle = "#8B5A2B";
         ctx.fillRect(
           -treeTrunkWidth / 2,
           -treeTrunkHeight,
@@ -636,6 +660,18 @@
         ctx.lineTo(0, -(treeTrunkHeight + treeCrownHeight));
         ctx.lineTo(treeCrownWidth / 2, -treeTrunkHeight);
         ctx.fillStyle = color;
+        ctx.fill();
+
+        // Draw some oranges on the tree
+        ctx.fillStyle = "#FF6B35";
+        ctx.beginPath();
+        ctx.arc(-3, -15, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(4, -20, 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(2, -10, 2, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.restore();
