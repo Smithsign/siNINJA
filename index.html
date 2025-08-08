@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orange Hero</title>
+    <title>Ninja Hero</title>
     <style>
       html,
       body {
@@ -14,6 +14,7 @@
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         cursor: pointer;
+        background: #111;
       }
 
       .container {
@@ -30,7 +31,7 @@
         font-size: 2em;
         font-weight: 900;
         color: #FF6B35;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
       }
 
       #introduction {
@@ -43,6 +44,7 @@
         text-align: center;
         transition: opacity 2s;
         color: #FF6B35;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
       }
 
       #restart {
@@ -58,7 +60,7 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         display: none;
         cursor: pointer;
-        box-shadow: 0 4px 8px rgba(255,107,53,0.3);
+        box-shadow: 0 4px 15px rgba(255,107,53,0.4);
       }
 
       #perfect {
@@ -67,7 +69,7 @@
         transition: opacity 2s;
         color: #FF6B35;
         font-weight: bold;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
       }
 
       #youtube,
@@ -270,7 +272,7 @@
           minimumGap +
           Math.floor(Math.random() * (maximumGap - minimumGap));
 
-        const treeColors = ["#FF9F1C", "#FFB347", "#FFA836"];
+        const treeColors = ["#FF6B35", "#FF8C42", "#FF9F1C"];
         const color = treeColors[Math.floor(Math.random() * 3)];
 
         trees.push({ x, color });
@@ -483,7 +485,7 @@
       function drawPlatforms() {
         platforms.forEach(({ x, w }) => {
           // Draw platform
-          ctx.fillStyle = "#FF6B35";
+          ctx.fillStyle = "#333";
           ctx.fillRect(
             x,
             canvasHeight - platformHeight,
@@ -491,14 +493,13 @@
             platformHeight + (window.innerHeight - canvasHeight) / 2
           );
 
-          // Draw border
-          ctx.strokeStyle = "#E85D04";
-          ctx.lineWidth = 2;
-          ctx.strokeRect(
+          // Draw platform top with orange accent
+          ctx.fillStyle = "#FF6B35";
+          ctx.fillRect(
             x,
             canvasHeight - platformHeight,
             w,
-            platformHeight + (window.innerHeight - canvasHeight) / 2
+            5
           );
 
           // Draw perfect area only if hero did not yet reach the platform
@@ -516,13 +517,13 @@
 
       function drawHero() {
         ctx.save();
-        ctx.fillStyle = "#FF6B35";
+        ctx.fillStyle = "#222";
         ctx.translate(
           heroX - heroWidth / 2,
           heroY + canvasHeight - platformHeight - heroHeight / 2
         );
 
-        // Body
+        // Body (black ninja)
         drawRoundedRect(
           -heroWidth / 2,
           -heroHeight / 2,
@@ -546,19 +547,16 @@
         ctx.arc(5, -7, 3, 0, Math.PI * 2, false);
         ctx.fill();
 
-        // Band
-        ctx.fillStyle = "#E85D04";
-        ctx.fillRect(-heroWidth / 2 - 1, -12, heroWidth + 2, 4.5);
-        ctx.beginPath();
-        ctx.moveTo(-9, -14.5);
-        ctx.lineTo(-17, -18.5);
-        ctx.lineTo(-14, -8.5);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(-10, -10.5);
-        ctx.lineTo(-15, -3.5);
-        ctx.lineTo(-5, -7);
-        ctx.fill();
+        // Orange headband (ninja style)
+        ctx.fillStyle = "#FF6B35";
+        ctx.fillRect(-heroWidth / 2 - 1, -15, heroWidth + 2, 4);
+        
+        // Orange belt
+        ctx.fillRect(-heroWidth / 2 - 1, 8, heroWidth + 2, 3);
+
+        // Orange arm bands
+        ctx.fillRect(-heroWidth/2 - 3, -5, 3, 8);
+        ctx.fillRect(heroWidth/2, -5, 3, 8);
 
         ctx.restore();
       }
@@ -585,13 +583,24 @@
           ctx.translate(stick.x, canvasHeight - platformHeight);
           ctx.rotate((Math.PI / 180) * stick.rotation);
 
-          // Draw stick
+          // Draw stick (orange ninja staff)
           ctx.beginPath();
           ctx.lineWidth = 3;
-          ctx.strokeStyle = "#FF9F1C";
+          ctx.strokeStyle = "#FF6B35";
+          ctx.lineCap = "round";
           ctx.moveTo(0, 0);
           ctx.lineTo(0, -stick.length);
           ctx.stroke();
+
+          // Draw staff ends
+          ctx.beginPath();
+          ctx.arc(0, 0, 2, 0, Math.PI * 2);
+          ctx.fillStyle = "#FF6B35";
+          ctx.fill();
+          
+          ctx.beginPath();
+          ctx.arc(0, -stick.length, 2, 0, Math.PI * 2);
+          ctx.fill();
 
           // Restore transformations
           ctx.restore();
@@ -599,22 +608,26 @@
       }
 
       function drawBackground() {
-        // Draw sky gradient from light orange to yellow
+        // Draw night sky gradient
         var gradient = ctx.createLinearGradient(0, 0, 0, window.innerHeight);
-        gradient.addColorStop(0, "#FFD166");
-        gradient.addColorStop(1, "#FFECB8");
+        gradient.addColorStop(0, "#1A1A2E");
+        gradient.addColorStop(1, "#16213E");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-        // Draw sun
+        // Draw moon
         ctx.beginPath();
-        ctx.fillStyle = "#FFD166";
-        ctx.arc(100, 100, 50, 0, Math.PI * 2);
+        ctx.fillStyle = "#FFECB8";
+        ctx.arc(100, 100, 30, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw hills
-        drawHill(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#FF9F1C");
-        drawHill(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#FF6B35");
+        // Draw hills (dark with orange accents)
+        drawHill(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#333");
+        drawHill(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#222");
+
+        // Draw orange accent lines on hills
+        drawHillAccents(hill1BaseHeight, hill1Amplitude, hill1Stretch, "#FF6B35");
+        drawHillAccents(hill2BaseHeight, hill2Amplitude, hill2Stretch, "#FF8C42");
 
         // Draw trees
         trees.forEach((tree) => drawTree(tree.x, tree.color));
@@ -633,6 +646,18 @@
         ctx.fill();
       }
 
+      function drawHillAccents(baseHeight, amplitude, stretch, color) {
+        ctx.beginPath();
+        ctx.moveTo(0, getHillY(0, baseHeight, amplitude, stretch) + 5);
+        for (let i = 0; i < window.innerWidth; i += 20) {
+          ctx.lineTo(i, getHillY(i, baseHeight, amplitude, stretch) + 5);
+        }
+        ctx.lineTo(window.innerWidth, getHillY(window.innerWidth, baseHeight, amplitude, stretch) + 5);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
       function drawTree(x, color) {
         ctx.save();
         ctx.translate(
@@ -646,7 +671,7 @@
         const treeCrownWidth = 10;
 
         // Draw trunk
-        ctx.fillStyle = "#8B5A2B";
+        ctx.fillStyle = "#5D4037";
         ctx.fillRect(
           -treeTrunkWidth / 2,
           -treeTrunkHeight,
@@ -662,7 +687,7 @@
         ctx.fillStyle = color;
         ctx.fill();
 
-        // Draw some oranges on the tree
+        // Draw some orange fruits on the tree
         ctx.fillStyle = "#FF6B35";
         ctx.beginPath();
         ctx.arc(-3, -15, 2, 0, Math.PI * 2);
